@@ -4,7 +4,6 @@ import "../Styles/PersonalInfoComponent.css";
 import BackNextBtnComponent from "./BackNextBtnComponent";
 import InputComponent from "./InputComponent";
 import { connect } from "react-redux";
-import AvatarEditor from "react-avatar-editor";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -108,17 +107,12 @@ const PersonalInfoComponent = (props) => {
   const onSelectFile = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
-      reader.addEventListener('load', () => setSrc(reader.result));
+      reader.addEventListener('load', () => setImg(reader.result));
       reader.readAsDataURL(e.target.files[0]);
     }
   };
 
   const saveImage = () => {
-    if (editor) {
-      const canvas = editor.getImage();
-      const canvasDataUrl = canvas.toDataURL();
-      setImg(canvasDataUrl);
-    }
     setOpen(false);
   };
 
@@ -179,18 +173,6 @@ const PersonalInfoComponent = (props) => {
           </BootstrapDialogTitle>
           <DialogContent>
             <input type="file" accept="image/*" onChange={onSelectFile} />
-            {src && (
-              <AvatarEditor
-                ref={editor => setEditor(editor)}
-                image={src}
-                width={windowSize.innerWidth > 900 ? 400 : 200}
-                height={windowSize.innerWidth > 500 ? 400 : 150}
-                border={50}
-                color={[255, 255, 255, 0.6]} // RGBA
-                scale={1.2}
-                rotate={0}
-              />
-            )}
           </DialogContent>
           <DialogActions>
           <Button  onClick={saveImage}>   
