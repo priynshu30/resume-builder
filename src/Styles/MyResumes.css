@@ -1,0 +1,53 @@
+.my-resumes {
+  width: 100%;
+  background-color: rgba(228, 228, 228, 0.722);
+  padding: 50px;
+  min-height: 80vh;
+}
+
+.my-resumes-title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.no-resumes {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 50px;
+}
+
+.resume-card {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.resume-card .MuiCardContent-root {
+  text-align: center;
+}
+
+.resume-card h6 {
+  margin-bottom: 10px;
+}
+
+.resume-card .MuiButton-root {
+  margin: 5px;
+}
+
+.my-resumes-container .no-resumes-container .no-resumes-text {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 500px) {
+  .my-resumes {
+    padding: 0px;
+  }
+}
+@media screen and (max-width: 1050px) {
+  .my-resumes-container {
+    justify-content: center;
+    padding: 40px 30px !important;
+  }
+}
