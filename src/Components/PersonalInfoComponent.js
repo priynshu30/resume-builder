@@ -4,7 +4,7 @@ import "../Styles/PersonalInfoComponent.css";
 import BackNextBtnComponent from "./BackNextBtnComponent";
 import InputComponent from "./InputComponent";
 import { connect } from "react-redux";
-import Avatar1 from "react-avatar-edit";
+import AvatarEditor from "react-avatar-editor";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -47,7 +47,8 @@ const PersonalInfoComponent = (props) => {
   const [img, setImg] = useState(
     props.personalInfo.profileImg.length ? props.personalInfo.profileImg : ""
   );
-  const [ setSotreImage] = useState([]);
+  const [editor, setEditor] = useState(null);
+  const [src, setSrc] = useState(null);
 
   const [open, setOpen] = useState(false);
 
@@ -97,16 +98,27 @@ const PersonalInfoComponent = (props) => {
   };
 
   const onCrop = (view) => {
-    setImg(view);
+    // This function is no longer needed for react-avatar-editor
   };
 
-  const onClose = (view) => {
-    setImg(null);
+  const onClose = () => {
+    setSrc(null);
+  };
+
+  const onSelectFile = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => setSrc(reader.result));
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
 
   const saveImage = () => {
-    setSotreImage([{ img }]);
-    // props.onSetProfileImage(img);
+    if (editor) {
+      const canvas = editor.getImage();
+      const canvasDataUrl = canvas.toDataURL();
+      setImg(canvasDataUrl);
+    }
     setOpen(false);
   };
 
@@ -166,12 +178,19 @@ const PersonalInfoComponent = (props) => {
             Update Image
           </BootstrapDialogTitle>
           <DialogContent>
-            <Avatar1
-              width={windowSize.innerWidth > 900 && 400}
-              height={windowSize.innerWidth > 500 ? 400 : 150}
-              onCrop={onCrop}
-              onClose={onClose}
-            />
+            <input type="file" accept="image/*" onChange={onSelectFile} />
+            {src && (
+              <AvatarEditor
+                ref={editor => setEditor(editor)}
+                image={src}
+                width={windowSize.innerWidth > 900 ? 400 : 200}
+                height={windowSize.innerWidth > 500 ? 400 : 150}
+                border={50}
+                color={[255, 255, 255, 0.6]} // RGBA
+                scale={1.2}
+                rotate={0}
+              />
+            )}
           </DialogContent>
           <DialogActions>
           <Button  onClick={saveImage}>   
