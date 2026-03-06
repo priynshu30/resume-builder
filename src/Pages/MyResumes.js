@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Common/Navbar";
 import "../Styles/MyResumes.css";
-import { templates } from "../data/templates";
 import { Button, Stack, Card, CardContent, Typography } from "@mui/material";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";

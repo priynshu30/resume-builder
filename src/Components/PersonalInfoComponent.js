@@ -1,10 +1,9 @@
 import { Avatar, Button, Divider, Paper, Snackbar } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../Styles/PersonalInfoComponent.css";
 import BackNextBtnComponent from "./BackNextBtnComponent";
 import InputComponent from "./InputComponent";
 import { connect } from "react-redux";
-import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -22,15 +21,6 @@ const mapDispatchToProps = (dispatch) => ({
   onAddPersonalInfo: (details) => dispatch(addPersonalInfo(details)),
 });
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
-
 const PersonalInfoComponent = (props) => {
   const [loading, setLoading] = useState(false);
   const [imgSnackbar, setImgSnackbar] = useState(false);
@@ -46,8 +36,6 @@ const PersonalInfoComponent = (props) => {
   const [img, setImg] = useState(
     props.personalInfo.profileImg.length ? props.personalInfo.profileImg : ""
   );
-  const [editor, setEditor] = useState(null);
-  const [src, setSrc] = useState(null);
 
   const [open, setOpen] = useState(false);
 
@@ -73,37 +61,6 @@ const PersonalInfoComponent = (props) => {
     }
   };
 
-  const BootstrapDialogTitle = (props) => {
-    const { children, onClose, ...other } = props;
-
-    return (
-      <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-        {children}
-        {onClose ? (
-          <IconButton
-            aria-label="close"
-            onClick={onClose}
-            sx={{
-              position: "absolute",
-              right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],
-            }}>
-            <CloseIcon />
-          </IconButton>
-        ) : null}
-      </DialogTitle>
-    );
-  };
-
-  const onCrop = (view) => {
-    // This function is no longer needed for react-avatar-editor
-  };
-
-  const onClose = () => {
-    setSrc(null);
-  };
-
   const onSelectFile = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
@@ -125,24 +82,6 @@ const PersonalInfoComponent = (props) => {
   };
 
   // getting windows width
-  const getWindowSize = () => {
-    const { innerWidth, innerHeight } = window;
-    return { innerWidth, innerHeight };
-  };
-
-  const [windowSize, setWindowSize] = useState(getWindowSize());
-  useEffect(() => {
-    function handleWindowResize() {
-      setWindowSize(getWindowSize());
-    }
-
-    window.addEventListener("resize", handleWindowResize);
-
-    return () => {
-      window.removeEventListener("resize", handleWindowResize);
-    };
-  }, []);
-
   // const profileImg = sotreImage.map((ele) => ele.img);
   // console.log(props.personalInfo, errors);
 
@@ -162,26 +101,34 @@ const PersonalInfoComponent = (props) => {
           onClick={handleClickOpen}>
           Change Profile Photo
         </Button>
-        <BootstrapDialog
+        <Dialog
           onClose={handleClose}
           aria-labelledby="customized-dialog-title"
           open={open}>
-          <BootstrapDialogTitle
-            id="customized-dialog-title"
-            onClose={handleClose}>
+          <DialogTitle
+            id="customized-dialog-title">
             Update Image
-          </BootstrapDialogTitle>
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}>
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
           <DialogContent>
             <input type="file" accept="image/*" onChange={onSelectFile} />
           </DialogContent>
           <DialogActions>
-          <Button  onClick={saveImage}>   
-            
-            </Button> 
-             
-            
+            <Button onClick={saveImage}>
+              Save
+            </Button>
           </DialogActions>
-        </BootstrapDialog>
+        </Dialog>
       </div>
       <form onSubmit={handleSubmit(handleNext)}>
         <div className="personal-info-form-fields">
